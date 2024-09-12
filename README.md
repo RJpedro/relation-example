@@ -63,3 +63,20 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # relation-example
+
+## Configuração do Projeto
+
+- **Clonar o Projeto**
+`git clone git@github.com:RJpedro/relation-example.git`
+
+- **Subir os Containers**
+`docker-compose up`
+
+- **Instalar dependências do Node e do PHP dentro do container relations-php-fpm**
+`npm i && composer i`
+
+- **Buildar o Projeto**
+`npm run prod`
+
+- **Acessar o Projeto**
+`localhost:80` 
