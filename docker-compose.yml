@@ -1,0 +1,50 @@
+version: "3.6"
+
+services:
+  # Nginx Web Application
+  webserver:
+    container_name: relations-webserver
+    image: nginx:alpine
+    working_dir: /var/www/relations-example
+    volumes:
+      - .:/var/www/relations-example
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_HOST=localhost
+    networks:
+      - objctv
+
+  # PHP-FPM
+  php-fpm:
+    container_name: relations-php-fpm
+    build: docker/php-fpm
+    working_dir: /var/www/relations-example
+    volumes:
+      - .:/var/www/relations-example
+      - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/8.2/fpm/conf.d/99-overrides.ini
+    networks:
+      - objctv
+
+  # MySQL
+  mysql:
+    container_name: relations-example-mysql8
+    image: mysql:8.0
+    command: mysqld --default-authentication-plugin=caching_sha2_password --character-set-server=latin1 --collation-server=latin1_swedish_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=relations-example
+      - MYSQL_USER=mysqluser
+      - MYSQL_PASSWORD=mysqlpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - './docker/db/data:/var/lib/mysql'
+      - './docker/db/my.cnf:/etc/mysql/conf.d/my.cnf'
+      - './docker/db/sql:/docker-entrypoint-initdb.d'
+    networks:
+      - objctv
+
+networks:
+  objctv:
